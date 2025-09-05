@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "majed_asp_nvc", "majed_asp_nvc\majed_asp_nvc.csproj", "{11868EB2-B7A2-4C7F-86B8-0E03D50B5306}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11868EB2-B7A2-4C7F-86B8-0E03D50B5306}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11868EB2-B7A2-4C7F-86B8-0E03D50B5306}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11868EB2-B7A2-4C7F-86B8-0E03D50B5306}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11868EB2-B7A2-4C7F-86B8-0E03D50B5306}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D4C7F454-E563-499F-BFAD-0A20D6487BEF}
+	EndGlobalSection
+EndGlobal
