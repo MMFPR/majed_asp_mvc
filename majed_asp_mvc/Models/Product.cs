@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace majed_asp_mvc.Models
 {
@@ -10,5 +11,9 @@ namespace majed_asp_mvc.Models
         public string Name { get; set; }
         public double Price { get; set; }
         public string? Description { get; set; }
+
+        [ForeignKey("Category")]
+        public int? CategoryId { get; set; }
+        public Category? Category { get; set; }
     }
 }

@@ -3,7 +3,7 @@ using majed_asp_mvc.Data;
 using majed_asp_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Bootcamp4_AspMVC.Controllers
+namespace majed_asp_mvc.Controllers
 {
     // تعريف وحدة التحكم الخاصة بالتصنيفات
     public class CategoryController : Controller
@@ -117,5 +117,9 @@ namespace Bootcamp4_AspMVC.Controllers
                 return Content("حدث خطا غير متوقع يرجي مراجهة الدعم الفني:0565455252545");
             }
         }
+
+
+
+
     }
 }
