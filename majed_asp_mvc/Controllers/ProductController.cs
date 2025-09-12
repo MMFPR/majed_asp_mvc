@@ -1,5 +1,5 @@
-﻿using majed_asp_nvc.Data;
-using majed_asp_nvc.Models;
+﻿using majed_asp_mvc.Data;
+using majed_asp_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bootcamp4_AspMVC.Controllers

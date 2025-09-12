@@ -1,8 +1,8 @@
 ﻿
-using majed_asp_nvc.Models;
+using majed_asp_mvc.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace majed_asp_nvc.Data
+namespace majed_asp_mvc.Data
 {
 
 

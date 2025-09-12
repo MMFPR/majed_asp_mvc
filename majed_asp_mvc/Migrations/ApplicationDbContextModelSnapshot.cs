@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using majed_asp_nvc.Data;
+using majed_asp_mvc.Data;
 
 #nullable disable
 
-namespace majed_asp_nvc.Migrations
+namespace majed_asp_mvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -21,7 +21,7 @@ namespace majed_asp_nvc.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("majed_asp_nvc.Models.Category", b =>
+            modelBuilder.Entity("majed_asp_mvc.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,7 +41,7 @@ namespace majed_asp_nvc.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("majed_asp_nvc.Models.Product", b =>
+            modelBuilder.Entity("majed_asp_mvc.Models.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

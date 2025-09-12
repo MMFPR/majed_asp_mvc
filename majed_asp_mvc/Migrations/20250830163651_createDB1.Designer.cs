@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using majed_asp_nvc.Data;
+using majed_asp_mvc.Data;
 
 #nullable disable
 
-namespace majed_asp_nvc.Migrations
+namespace majed_asp_mvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250830163651_createDB1")]

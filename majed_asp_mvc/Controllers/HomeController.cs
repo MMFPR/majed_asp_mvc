@@ -1,8 +1,8 @@
 using System.Diagnostics;
-using majed_asp_nvc.Models;
+using majed_asp_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace majed_asp_nvc.Controllers
+namespace majed_asp_mvc.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,4 +1,4 @@
-using majed_asp_nvc.Data;
+using majed_asp_mvc.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

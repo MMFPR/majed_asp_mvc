@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace majed_asp_nvc.Migrations
+namespace majed_asp_mvc.Migrations
 {
     /// <inheritdoc />
     public partial class createDB1 : Migration

@@ -1,4 +1,4 @@
-namespace majed_asp_nvc.Models
+namespace majed_asp_mvc.Models
 {
     public class ErrorViewModel
     {
