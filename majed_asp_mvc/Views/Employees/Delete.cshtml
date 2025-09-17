@@ -1,0 +1,28 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete Employee</h1>
+
+<form method="post" asp-action="Delete">
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" disabled class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Position" class="form-label"></label>
+        <input asp-for="Position" disabled class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Salary" class="form-label"></label>
+        <input asp-for="Salary" disabled class="form-control" type="number" step="0.01" />
+    </div>
+
+    <button type="submit" class="btn btn-outline-primary">Save</button>
+    <a asp-action="Index" class="btn btn-dark">Back</a>
+
+</form>

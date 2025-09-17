@@ -21,6 +21,7 @@ namespace majed_asp_mvc.Controllers
 
         //------------------------
 
+        // تجهيز قائمة التصنيفات وإرسالها إلى ViewBag لعرضها في القائمة المنسدلة داخل النموذج
         private void SetCategoryViewBag()
         {
             IEnumerable<Category> categories = _context.Categories.ToList();
@@ -70,16 +71,16 @@ namespace majed_asp_mvc.Controllers
 
      
         [HttpPost]
-        public IActionResult Edit(Product products)
+        public IActionResult Edit(Product product)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return View(products); 
+                    return View(product); 
                 }
 
-                _context.Products.Update(products);
+                _context.Products.Update(product);
                 _context.SaveChanges(); 
                 return RedirectToAction("Index"); 
             }
@@ -99,11 +100,11 @@ namespace majed_asp_mvc.Controllers
 
 
         [HttpPost]
-        public IActionResult Delete(Product products)
+        public IActionResult Delete(Product product)
         {
             try
             {
-                _context.Products.Remove(products);
+                _context.Products.Remove(product);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }

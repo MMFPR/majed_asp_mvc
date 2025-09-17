@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using majed_asp_mvc.Data;
 
@@ -11,9 +12,11 @@ using majed_asp_mvc.Data;
 namespace majed_asp_mvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250917004906_AddTableDepartment17092025")]
+    partial class AddTableDepartment17092025
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,72 +62,6 @@ namespace majed_asp_mvc.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("majed_asp_mvc.Models.Employee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("NationalityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Position")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("NationalityId");
-
-                    b.ToTable("Employees");
-                });
-
-            modelBuilder.Entity("majed_asp_mvc.Models.Nationality", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Nationalities");
-                });
-
             modelBuilder.Entity("majed_asp_mvc.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -153,21 +90,6 @@ namespace majed_asp_mvc.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("majed_asp_mvc.Models.Employee", b =>
-                {
-                    b.HasOne("majed_asp_mvc.Models.Department", "Department")
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentId");
-
-                    b.HasOne("majed_asp_mvc.Models.Nationality", "Nationality")
-                        .WithMany("Employees")
-                        .HasForeignKey("NationalityId");
-
-                    b.Navigation("Department");
-
-                    b.Navigation("Nationality");
-                });
-
             modelBuilder.Entity("majed_asp_mvc.Models.Product", b =>
                 {
                     b.HasOne("majed_asp_mvc.Models.Category", "Category")
@@ -180,16 +102,6 @@ namespace majed_asp_mvc.Migrations
             modelBuilder.Entity("majed_asp_mvc.Models.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("majed_asp_mvc.Models.Department", b =>
-                {
-                    b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("majed_asp_mvc.Models.Nationality", b =>
-                {
-                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

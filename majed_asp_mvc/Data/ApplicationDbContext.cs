@@ -15,6 +15,9 @@ namespace majed_asp_mvc.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Nationality> Nationalities { get; set; }
 
     }
 
