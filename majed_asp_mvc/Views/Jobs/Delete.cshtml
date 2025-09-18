@@ -1,0 +1,18 @@
+﻿@model Job
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete Job</h1>
+
+<form method="post" asp-action="Delete">
+
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" disabled name="Name" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-outline-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-dark">Back</a>
+
+</form>

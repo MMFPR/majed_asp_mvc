@@ -20,11 +20,11 @@
                 <th>Id</th>
                 <th>Name</th>
                 <th>Gender</th>
+                <th>Job</th>
                 <th>Nationality</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Address</th>
-                <th>Position</th>
                 <th>Salary</th>
                 <th>Department</th>
                 <th>Actions</th>
@@ -39,13 +39,14 @@
                     <td>@emp.Id</td>
                     <td>@emp.Name</td>
                     <td>@emp.Gender</td>
-                    <td>@emp.Nationality</td>
+                    @* <td>@(emp.Job?.Name ?? "Null")</td> *@
+                    <td>@(emp.Job?.Name)</td>
+                    <td>@(emp.Nationality?.Name ?? "Null")</td>
                     <td>@emp.Email</td>
                     <td>@emp.Phone</td>
                     <td>@emp.Address</td>
-                    <td>@emp.Position</td>
                     <td>@emp.Salary</td>
-                    <td>@(emp.Department?.Name ?? "-")</td>
+                    <td>@(emp.Department?.Name ?? "Null")</td>
                     <td>
                         <a asp-action="Edit" asp-route-Id="@emp.Id" class="btn btn-outline-warning">Edit</a>
                         <a asp-action="Delete" asp-route-Id="@emp.Id" class="btn btn-outline-danger">Delete</a>

@@ -4,13 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace majed_asp_mvc.Controllers
 {
-    public class DepartmentsController : Controller
+    public class JobsController : Controller
     {
 
-
-
         private readonly ApplicationDbContext _context;
-        public DepartmentsController(ApplicationDbContext context)
+        public JobsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -23,8 +21,8 @@ namespace majed_asp_mvc.Controllers
         {
             try
             {
-                IEnumerable<Department> depts = _context.Departments.ToList();
-                return View(depts);
+                IEnumerable<Job> jobs = _context.Jobs.ToList();
+                return View(jobs);
             }
             catch (Exception ex)
             {
@@ -39,22 +37,22 @@ namespace majed_asp_mvc.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(); 
+            return View();
         }
 
         [HttpPost]
-        public IActionResult Create(Department dept)
+        public IActionResult Create(Job jobs)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return View(dept);
+                    return View(jobs);
                 }
 
-                _context.Departments.Add(dept);
-                _context.SaveChanges(); 
-                return RedirectToAction("Index"); 
+                _context.Jobs.Add(jobs);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -65,23 +63,23 @@ namespace majed_asp_mvc.Controllers
         [HttpGet]
         public IActionResult Edit(int Id)
         {
-            var dept = _context.Departments.Find(Id);
-            return View(dept); 
+            var jobs = _context.Jobs.Find(Id);
+            return View(jobs);
         }
 
         [HttpPost]
-        public IActionResult Edit(Department dept)
+        public IActionResult Edit(Job jobs)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return View(dept); 
+                    return View(jobs);
                 }
 
-                _context.Departments.Update(dept); 
+                _context.Jobs.Update(jobs);
                 _context.SaveChanges();
-                return RedirectToAction("Index"); 
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -93,17 +91,17 @@ namespace majed_asp_mvc.Controllers
         [HttpGet]
         public IActionResult Delete(int Id)
         {
-            var dept = _context.Departments.Find(Id);
-            return View(dept); 
+            var jobs = _context.Jobs.Find(Id);
+            return View(jobs);
         }
 
         [HttpPost]
-        public IActionResult Delete(Department dept)
+        public IActionResult Delete(Job jobs)
         {
             try
             {
-                _context.Departments.Remove(dept);
-                _context.SaveChanges(); 
+                _context.Jobs.Remove(jobs);
+                _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -122,7 +120,4 @@ namespace majed_asp_mvc.Controllers
 
 
     }
-
-
-
 }

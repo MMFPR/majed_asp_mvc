@@ -16,17 +16,22 @@ namespace majed_asp_mvc.Models
         public string? Position { get; set; }
         public decimal Salary { get; set; }
 
+
+        //--------------------
+
         [ForeignKey("Department")]
         public int? DepartmentId { get; set; }
         public Department? Department { get; set; }
-
-        //--------------------
 
         [ForeignKey("Nationality")]
         public int? NationalityId { get; set; }
         public Nationality? Nationality { get; set; }
 
+        [ForeignKey("Job")]
+        public int? JobId { get; set; }
+        public Job? Job { get; set; }
 
-    }
+
+        }
 }
 

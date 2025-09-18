@@ -14,9 +14,47 @@
     </div>
 
     <div class="mb-3">
-        <label asp-for="Position" class="form-label"></label>
-        <input asp-for="Position" class="form-control" />
-        <span asp-validation-for="Position" class="text-danger"></span>
+        <label asp-for="Gender" class="form-label"></label>
+
+        <select asp-for="Gender" class="form-control">
+            <option value="">-- اختر الجنس --</option>
+            <option value="ذكر">ذكر</option>
+            <option value="أنثى">أنثى</option>
+        </select>
+
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Job" class="form-label"></label>
+        <select asp-for="JobId" name="JobId" class="form-control" asp-items="@ViewBag.Jobs">
+            <option selected value="">-- اختر الوظيفة --</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Nationality" class="form-label"></label>
+        <select asp-for="NationalityId" class="form-control" asp-items="@ViewBag.Nationalities">
+            <option selected value="">-- اختر الجنسية --</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" type="email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label"></label>
+        <input asp-for="Phone" class="form-control" type="tel" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
@@ -25,7 +63,14 @@
         <span asp-validation-for="Salary" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-outline-primary">Save</button>
+    <div class="mb-3">
+        <label asp-for="Department" class="form-label"></label>
+        <select asp-for="DepartmentId" name="DepartmentId" class="form-control" asp-items="@ViewBag.Departments">
+            <option selected value="">-- اختر القسم --</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-outline-primary">Update</button>
     <a asp-action="Index" class="btn btn-dark">Back</a>
 
 </form>

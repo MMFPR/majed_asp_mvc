@@ -23,8 +23,9 @@ namespace majed_asp_mvc.Controllers
         {
             try
             {
-                IEnumerable<Employee> emp = _context.Employees.Include(d => d.Department).ToList();
+                IEnumerable<Employee> emp = _context.Employees.Include(e => e.Department).Include(j => j.Job).Include(n => n.Nationality).ToList();
                 return View(emp);
+
             }
             catch (Exception ex)
             {
@@ -49,6 +50,13 @@ namespace majed_asp_mvc.Controllers
             ViewBag.Nationalities = selectListItems;
         }
 
+        private void SetJobViewBag()
+        {
+            IEnumerable<Job> job = _context.Jobs.ToList();
+            SelectList selectListItems = new SelectList(job, "Id", "Name");
+            ViewBag.Jobs = selectListItems;
+        }
+
 
         //------------------------
 
@@ -57,6 +65,7 @@ namespace majed_asp_mvc.Controllers
         public IActionResult Create()
         {
             SetNationalityViewBag();
+            SetJobViewBag();
             SetDeptViewBag();
             return View();
         }
@@ -84,10 +93,11 @@ namespace majed_asp_mvc.Controllers
         [HttpGet]
         public IActionResult Edit(int Id)
         {
-            var dept = _context.Employees.Find(Id);
+            var emp = _context.Employees.Find(Id);
             SetNationalityViewBag();
+            SetJobViewBag();
             SetDeptViewBag();
-            return View(dept);
+            return View(emp);
         }
 
         [HttpPost]

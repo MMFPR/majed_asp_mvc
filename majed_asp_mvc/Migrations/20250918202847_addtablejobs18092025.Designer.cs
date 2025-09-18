@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using majed_asp_mvc.Data;
 
@@ -11,9 +12,11 @@ using majed_asp_mvc.Data;
 namespace majed_asp_mvc.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250918202847_addtablejobs18092025")]
+    partial class addtablejobs18092025
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,9 +85,6 @@ namespace majed_asp_mvc.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("JobId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -105,8 +105,6 @@ namespace majed_asp_mvc.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
-
-                    b.HasIndex("JobId");
 
                     b.HasIndex("NationalityId");
 
@@ -181,17 +179,11 @@ namespace majed_asp_mvc.Migrations
                         .WithMany("Employees")
                         .HasForeignKey("DepartmentId");
 
-                    b.HasOne("majed_asp_mvc.Models.Job", "Job")
-                        .WithMany("Employees")
-                        .HasForeignKey("JobId");
-
                     b.HasOne("majed_asp_mvc.Models.Nationality", "Nationality")
                         .WithMany("Employees")
                         .HasForeignKey("NationalityId");
 
                     b.Navigation("Department");
-
-                    b.Navigation("Job");
 
                     b.Navigation("Nationality");
                 });
@@ -211,11 +203,6 @@ namespace majed_asp_mvc.Migrations
                 });
 
             modelBuilder.Entity("majed_asp_mvc.Models.Department", b =>
-                {
-                    b.Navigation("Employees");
-                });
-
-            modelBuilder.Entity("majed_asp_mvc.Models.Job", b =>
                 {
                     b.Navigation("Employees");
                 });
