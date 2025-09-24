@@ -6,6 +6,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// ÇáÊÍßã Ýí ÇáÌáÓÇÊ Ýí ÊÓÌíá ÇáÏÎæá
+builder.Services.AddSession(builder =>
+{
+    builder.IdleTimeout = TimeSpan.FromMinutes(15);
+    builder.Cookie.HttpOnly = true;
+    builder.Cookie.IsEssential = true;
+});
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options => options
 .UseSqlServer(connectionString));
@@ -20,6 +28,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
+app.UseSession();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -29,6 +39,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.Run();

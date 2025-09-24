@@ -1,9 +1,11 @@
-using System.Diagnostics;
+using majed_asp_mvc.Filters;
 using majed_asp_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace majed_asp_mvc.Controllers
 {
+    [SessionAuthorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -13,8 +15,13 @@ namespace majed_asp_mvc.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        private bool IsLoggedIn()
         {
+            return !string.IsNullOrEmpty(HttpContext.Session.GetString("UserEmail"));
+        }
+
+        public IActionResult Index()
+        {       
             return View();
         }
 

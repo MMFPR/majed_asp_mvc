@@ -1,10 +1,13 @@
 ﻿// استدعاء الملفات الضرورية: قاعدة البيانات، النماذج، وأدوات MVC
 using majed_asp_mvc.Data;
+using majed_asp_mvc.Filters;
 using majed_asp_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace majed_asp_mvc.Controllers
 {
+    [SessionAuthorize]
+
     // تعريف وحدة التحكم الخاصة بالتصنيفات
     public class CategoryController : Controller
     {

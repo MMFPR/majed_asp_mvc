@@ -1,4 +1,5 @@
 ﻿using majed_asp_mvc.Data;
+using majed_asp_mvc.Filters;
 using majed_asp_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace majed_asp_mvc.Controllers
 {
+    [SessionAuthorize]
     public class EmployeesController : Controller
     {
 
