@@ -15,11 +15,6 @@ namespace majed_asp_mvc.Controllers
             _logger = logger;
         }
 
-        private bool IsLoggedIn()
-        {
-            return !string.IsNullOrEmpty(HttpContext.Session.GetString("UserEmail"));
-        }
-
         public IActionResult Index()
         {       
             return View();
