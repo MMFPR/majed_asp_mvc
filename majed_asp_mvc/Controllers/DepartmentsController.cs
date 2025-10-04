@@ -47,6 +47,7 @@ namespace majed_asp_mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Department dept)
         {
             try
@@ -74,6 +75,7 @@ namespace majed_asp_mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(Department dept)
         {
             try
@@ -102,6 +104,7 @@ namespace majed_asp_mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(Department dept)
         {
             try

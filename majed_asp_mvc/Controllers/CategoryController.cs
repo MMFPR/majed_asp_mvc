@@ -3,10 +3,12 @@ using majed_asp_mvc.Data;
 using majed_asp_mvc.Filters;
 using majed_asp_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace majed_asp_mvc.Controllers
 {
     [SessionAuthorize]
+
 
     // تعريف وحدة التحكم الخاصة بالتصنيفات
     public class CategoryController : Controller
@@ -29,6 +31,19 @@ namespace majed_asp_mvc.Controllers
                 // جلب جميع التصنيفات من قاعدة البيانات
                 IEnumerable<Category> categories = _context.Categories.ToList();
 
+                ////تحديث التوكن للبيانات القديمة في قاعدة البيانات يستخدم مرة واحدة عند وجود بيانات سابقة لا تحتوي على توكن بعد ذلك يتوقف الكود 
+                //foreach (var category in categories)
+                //{
+                //    if (string.IsNullOrEmpty(category.Uid))
+                //    {
+                //        category.Uid = Guid.NewGuid().ToString();
+                //        category.CreatedAt = DateTime.Now;
+                //        _context.Categories.Update(category);
+                //        _context.SaveChanges();
+                //    }
+                //}
+
+
                 // عرض البيانات داخل صفحة Index
                 return View(categories);
             }
@@ -48,6 +63,7 @@ namespace majed_asp_mvc.Controllers
 
         // استقبال البيانات من النموذج وحفظ التصنيف الجديد
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Category category)
         {
             try
@@ -70,14 +86,15 @@ namespace majed_asp_mvc.Controllers
 
         // عرض نموذج تعديل التصنيف حسب الـ Id
         [HttpGet]
-        public IActionResult Edit(int Id)
+        public IActionResult Edit(string Uid)
         {
-            var category = _context.Categories.Find(Id); // البحث عن التصنيف المطلوب
+            var category = _context.Categories.AsNoTracking().FirstOrDefault(c => c.Uid == Uid); // البحث عن التصنيف المطلوب
             return View(category); // عرض النموذج مع بيانات التصنيف
         }
 
         // استقبال التعديلات وحفظها
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(Category category)
         {
             try
@@ -87,9 +104,22 @@ namespace majed_asp_mvc.Controllers
                     return View(category); // إعادة عرض النموذج في حال وجود أخطاء
                 }
 
-                _context.Categories.Update(category); // تحديث بيانات التصنيف
-                _context.SaveChanges(); // حفظ التغييرات
-                return RedirectToAction("Index"); // العودة لصفحة التصنيفات
+                var cate= _context.Categories.AsNoTracking().FirstOrDefault(e => e.Uid == category.Uid);
+                if (cate != null) 
+                {
+                    cate.Name = category.Name;
+                    cate.Description = category.Description;
+
+                    _context.Categories.Update(cate); // تحديث بيانات التصنيف
+                    _context.SaveChanges(); // حفظ التغييرات
+                    return RedirectToAction("Index"); // العودة لصفحة التصنيفات
+
+                }
+
+                return View(category);
+
+
+                
             }
             catch (Exception ex)
             {
@@ -99,14 +129,15 @@ namespace majed_asp_mvc.Controllers
 
         // عرض صفحة تأكيد الحذف لتصنيف معين
         [HttpGet]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(string Uid)
         {
-            var category = _context.Categories.Find(Id); // البحث عن التصنيف
+            var category = _context.Categories.AsNoTracking().FirstOrDefault(c => c.Uid == Uid); // البحث عن التصنيف المطلوب
             return View(category); // عرض صفحة الحذف
         }
 
         // تنفيذ عملية الحذف بعد التأكيد
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(Category category)
         {
             try

@@ -73,6 +73,7 @@ namespace majed_asp_mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Employee emp)
         {
             try
@@ -103,6 +104,7 @@ namespace majed_asp_mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(Employee emp)
         {
             try
@@ -131,6 +133,7 @@ namespace majed_asp_mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(Employee emp)
         {
             try

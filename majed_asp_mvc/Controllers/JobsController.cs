@@ -43,6 +43,7 @@ namespace majed_asp_mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Job jobs)
         {
             try
@@ -70,6 +71,7 @@ namespace majed_asp_mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(Job jobs)
         {
             try
@@ -98,6 +100,7 @@ namespace majed_asp_mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(Job jobs)
         {
             try

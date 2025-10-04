@@ -6,6 +6,9 @@
 <h1>Edit Category</h1>
 
 <form method="post" asp-action="Edit">
+    @Html.AntiForgeryToken()
+
+    <input asp-for="Uid" type="hidden" name="Uid" class="form-control" />
 
     <div class="mb-3">
         <label asp-for="Name" class="form-label"></label>

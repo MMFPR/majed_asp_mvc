@@ -17,8 +17,30 @@ namespace majed_asp_mvc.Controllers
         }
         public IActionResult Index()
         {
-            IEnumerable<Product> Products = _context.Products.Include(c => c.Category).ToList();
-            return View(Products);
+            try 
+            {
+                IEnumerable<Product> Products = _context.Products.Include(c => c.Category).ToList();
+                
+                ////تحديث التوكن للبيانات القديمة في قاعدة البيانات يستخدم مرة واحدة عند وجود بيانات سابقة لا تحتوي على توكن بعد ذلك يتوقف الكود 
+                //foreach (var item in Products)
+                //{
+                //    if (string.IsNullOrEmpty(item.Uid))
+                //    {
+                //        item.Uid = Guid.NewGuid().ToString();
+                //        _context.Products.Update(item);
+                //        _context.SaveChanges();
+                //    }
+                //}
+                return View(Products);
+
+
+            } 
+            
+            catch (Exception ex)
+            {
+                return Content("حدث خطا غير متوقع يرجي مراجهة الدعم الفني:0565455252545");
+            }
+            
         }
 
         //------------------------
@@ -43,6 +65,7 @@ namespace majed_asp_mvc.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(Product product)
         {
             try
@@ -64,15 +87,16 @@ namespace majed_asp_mvc.Controllers
 
        
         [HttpGet]
-        public IActionResult Edit(int Id)
+        public IActionResult Edit(string Uid)
         {
-            var products = _context.Products.Find(Id);
+            var products = _context.Products.AsNoTracking().FirstOrDefault(e => e.Uid == Uid);
             SetCategoryViewBag();
             return View(products);
         }
 
      
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(Product product)
         {
             try
@@ -82,9 +106,23 @@ namespace majed_asp_mvc.Controllers
                     return View(product); 
                 }
 
-                _context.Products.Update(product);
-                _context.SaveChanges(); 
-                return RedirectToAction("Index"); 
+                var prod = _context.Products.AsNoTracking().FirstOrDefault(e => e.Uid == product.Uid);
+                if (prod != null) 
+                {
+                    prod.Name = product.Name;
+                    prod.Price = product.Price;
+                    prod.Description = product.Description;
+                    prod.CategoryId = product.CategoryId;
+
+                    _context.Products.Update(prod);
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
+
+
+                }
+                return View(product);
+
+
             }
             catch (Exception ex)
             {
@@ -94,14 +132,15 @@ namespace majed_asp_mvc.Controllers
 
         
         [HttpGet]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(string Uid)
         {
-            var products = _context.Products.Find(Id); 
+            var products = _context.Products.AsNoTracking().FirstOrDefault(e => e.Uid == Uid);
             return View(products); 
         }
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Delete(Product product)
         {
             try

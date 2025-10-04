@@ -6,6 +6,9 @@
 <h1>Edit Job</h1>
 
 <form method="post" asp-action="Edit">
+    @Html.AntiForgeryToken()
+
+
 
     <div class="mb-3">
         <label asp-for="Name" class="form-label"></label>
