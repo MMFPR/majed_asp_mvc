@@ -1,7 +1,9 @@
 ﻿using majed_asp_mvc.Data;
 using majed_asp_mvc.Filters;
+using majed_asp_mvc.Interfaces;
 using majed_asp_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace majed_asp_mvc.Controllers
 {
@@ -11,13 +13,20 @@ namespace majed_asp_mvc.Controllers
     public class DepartmentsController : Controller
     {
 
+        //private readonly ApplicationDbContext _context;
+        private readonly IRepository<Department> _departmentRepository;
 
-
-        private readonly ApplicationDbContext _context;
-        public DepartmentsController(ApplicationDbContext context)
+        public DepartmentsController(IRepository<Department> departmentRepository)
         {
-            _context = context;
+            _departmentRepository = departmentRepository;
         }
+
+
+
+        //public DepartmentsController(ApplicationDbContext context)
+        //{
+        //    _context = context;
+        //}
 
 
         //----------------------------------------------------
@@ -27,7 +36,10 @@ namespace majed_asp_mvc.Controllers
         {
             try
             {
-                IEnumerable<Department> depts = _context.Departments.ToList();
+                //IEnumerable<Department> depts = _context.Departments.ToList();
+                IEnumerable<Department> depts = _departmentRepository.GetAll();
+
+
                 return View(depts);
             }
             catch (Exception ex)
@@ -57,8 +69,11 @@ namespace majed_asp_mvc.Controllers
                     return View(dept);
                 }
 
-                _context.Departments.Add(dept);
-                _context.SaveChanges(); 
+                //_context.Departments.Add(dept);
+                //_context.SaveChanges(); 
+
+                _departmentRepository.Add(dept);
+
                 return RedirectToAction("Index"); 
             }
             catch (Exception ex)
@@ -68,15 +83,16 @@ namespace majed_asp_mvc.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(int Id)
+        public IActionResult Edit(string Uid)
         {
-            var dept = _context.Departments.Find(Id);
-            return View(dept); 
+            //var dept = _context.Departments.Find(Id);
+            var dept = _departmentRepository.GetByUId(Uid);
+            return View(dept);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Department dept)
+        public IActionResult Edit(Department dept, string Uid)
         {
             try
             {
@@ -85,9 +101,17 @@ namespace majed_asp_mvc.Controllers
                     return View(dept); 
                 }
 
-                _context.Departments.Update(dept); 
-                _context.SaveChanges();
-                return RedirectToAction("Index"); 
+                var department = _departmentRepository.GetByUId(Uid);
+                if (department != null)
+                {
+                    department.Name = dept.Name;
+                    //_context.Departments.Update(dept); 
+                    //_context.SaveChanges();
+                    _departmentRepository.Update(department); // تحديث التصنيف عبر المستودع
+                    return RedirectToAction("Index"); // العودة لصفحة التصنيفات
+
+                }
+                return View(dept);
             }
             catch (Exception ex)
             {
@@ -97,10 +121,11 @@ namespace majed_asp_mvc.Controllers
 
 
         [HttpGet]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(string Uid)
         {
-            var dept = _context.Departments.Find(Id);
-            return View(dept); 
+            //var dept = _context.Departments.Find(Id);
+            var dept = _departmentRepository.GetByUId(Uid);
+            return View(dept);
         }
 
         [HttpPost]
@@ -109,8 +134,19 @@ namespace majed_asp_mvc.Controllers
         {
             try
             {
-                _context.Departments.Remove(dept);
-                _context.SaveChanges(); 
+                // جلب العنصر من قاعدة البيانات باستخدام Uid
+                var item = _departmentRepository.GetByUId(dept.Uid);
+                if (item != null)
+                {
+                    // حذف العنصر باستخدام Id الفعلي
+                    _departmentRepository.Delete(item.Id);
+                }
+
+
+                //_context.Departments.Remove(dept);
+                //_context.SaveChanges(); 
+
+                //_departmentRepository.Delete(dept.Id);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
