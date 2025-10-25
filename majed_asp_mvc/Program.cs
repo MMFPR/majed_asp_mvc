@@ -23,6 +23,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options => options
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(MainRepository<>));
 
+builder.Services.AddScoped(typeof(IProductRepo), typeof(ProductRepo));
+
+builder.Services.AddScoped(typeof(IEmployeeRepo), typeof(EmployeeRepo));
+
 
 var app = builder.Build();
 
