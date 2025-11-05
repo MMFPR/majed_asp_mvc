@@ -17,7 +17,7 @@ namespace majed_asp_mvc.Repositories
         public void Add(T entity)
         {
             _context.Set<T>().Add(entity);
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
 
         public void Delete(int id)
@@ -26,7 +26,7 @@ namespace majed_asp_mvc.Repositories
             if (entity != null)
             {
                 _context.Set<T>().Remove(entity);
-                _context.SaveChanges();
+                //_context.SaveChanges();
             }
         }
 
@@ -36,7 +36,7 @@ namespace majed_asp_mvc.Repositories
             if (entity != null)
             {
                 _context.Set<T>().Remove(entity);
-                _context.SaveChanges();
+                //_context.SaveChanges();
             }
         }
 
@@ -58,7 +58,7 @@ namespace majed_asp_mvc.Repositories
         public void Update(T entity)
         {
             _context.Set<T>().Update(entity);
-            _context.SaveChanges();
+            //_context.SaveChanges();
         }
     }
 }

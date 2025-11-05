@@ -12,21 +12,29 @@ namespace majed_asp_mvc.Controllers
     public class EmployeesController : Controller
     {
 
-        //private readonly ApplicationDbContext _context;
-        private readonly IEmployeeRepo _employeeRepo;
-        private readonly IRepository<Department> _departmentRepo;
-        private readonly IRepository<Job> _jobRepo;
-        private readonly IRepository<Nationality> _nationalityRepo;
+        ////private readonly ApplicationDbContext _context;
+        //private readonly IEmployeeRepo _employeeRepo;
+        //private readonly IRepository<Department> _departmentRepo;
+        //private readonly IRepository<Job> _jobRepo;
+        //private readonly IRepository<Nationality> _nationalityRepo;
 
 
-        public EmployeesController(IEmployeeRepo employeeRepo, IRepository<Department> departmentRepo, IRepository<Job> jobRepo, IRepository<Nationality> nationalityRepo)
+        //public EmployeesController(IEmployeeRepo employeeRepo, IRepository<Department> departmentRepo, IRepository<Job> jobRepo, IRepository<Nationality> nationalityRepo)
+        //{
+        //    //_context = context;
+        //    _employeeRepo = employeeRepo;
+        //    _departmentRepo = departmentRepo;
+        //    _jobRepo = jobRepo;
+        //    _nationalityRepo = nationalityRepo;
+        //}
+
+
+        private readonly IUnitOfWork _unitOfWork;
+        public EmployeesController(IUnitOfWork unitOfWork)
         {
-            //_context = context;
-            _employeeRepo = employeeRepo;
-            _departmentRepo = departmentRepo;
-            _jobRepo = jobRepo;
-            _nationalityRepo = nationalityRepo;
+            _unitOfWork = unitOfWork;
         }
+
 
 
         //----------------------------------------------------
@@ -42,7 +50,7 @@ namespace majed_asp_mvc.Controllers
                 //    .Include(n => n.Nationality)
                 //    .ToList();
 
-                IEnumerable<Employee> emp = _employeeRepo.GetEmployeesWithDepartmentAndJob();
+                IEnumerable<Employee> emp = _unitOfWork._employeeRepo.GetEmployeesWithDepartmentAndJob();
 
 
                 return View(emp);
@@ -60,7 +68,7 @@ namespace majed_asp_mvc.Controllers
         private void SetDeptViewBag()
         {
             //IEnumerable<Department> dapts = _context.Departments.ToList();
-            IEnumerable<Department> dapts = _departmentRepo.GetAll();
+            IEnumerable<Department> dapts = _unitOfWork._departmentRepo.GetAll();
             SelectList selectListItems = new SelectList(dapts, "Id", "Name");
             ViewBag.Departments = selectListItems;
         }
@@ -68,7 +76,7 @@ namespace majed_asp_mvc.Controllers
         private void SetNationalityViewBag()
         {
             //IEnumerable<Nationality> nationality = _context.Nationalities.ToList();
-            IEnumerable<Nationality> nationality = _nationalityRepo.GetAll();
+            IEnumerable<Nationality> nationality = _unitOfWork._nationalityRepo.GetAll();
             SelectList selectListItems = new SelectList(nationality, "Id", "Name");
             ViewBag.Nationalities = selectListItems;
         }
@@ -76,7 +84,7 @@ namespace majed_asp_mvc.Controllers
         private void SetJobViewBag()
         {
             //IEnumerable<Job> job = _context.Jobs.ToList();
-            IEnumerable<Job> job = _jobRepo.GetAll();
+            IEnumerable<Job> job = _unitOfWork._jobRepo.GetAll();
             SelectList selectListItems = new SelectList(job, "Id", "Name");
             ViewBag.Jobs = selectListItems;
         }
@@ -108,7 +116,8 @@ namespace majed_asp_mvc.Controllers
                 //_context.Employees.Add(emp);
                 //_context.SaveChanges();
 
-                _employeeRepo.Add(emp);
+                _unitOfWork._employeeRepo.Add(emp);
+                _unitOfWork.Save();
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -121,7 +130,7 @@ namespace majed_asp_mvc.Controllers
         public IActionResult Edit(int Id)
         {
             //var emp = _context.Employees.Find(Id);
-            var emp = _employeeRepo.GetById(Id);
+            var emp = _unitOfWork._employeeRepo.GetById(Id);
             SetNationalityViewBag();
             SetJobViewBag();
             SetDeptViewBag();
@@ -136,13 +145,17 @@ namespace majed_asp_mvc.Controllers
             {
                 if (!ModelState.IsValid)
                 {
+                    SetNationalityViewBag();
+                    SetJobViewBag();
+                    SetDeptViewBag();
                     return View(emp);
                 }
 
                 //_context.Employees.Update(emp);
                 //_context.SaveChanges();
 
-                _employeeRepo.Update(emp);
+                _unitOfWork._employeeRepo.Update(emp);
+                _unitOfWork.Save();
 
                 return RedirectToAction("Index");
             }
@@ -157,7 +170,7 @@ namespace majed_asp_mvc.Controllers
         public IActionResult Delete(int Id)
         {
             //var emp = _context.Employees.Find(Id);
-            var emp = _employeeRepo.GetById(Id);
+            var emp = _unitOfWork._employeeRepo.GetById(Id);
             return View(emp);
         }
 
@@ -170,7 +183,8 @@ namespace majed_asp_mvc.Controllers
                 //_context.Employees.Remove(emp);
                 //_context.SaveChanges();
 
-                _employeeRepo.Delete(emp.Id);
+                _unitOfWork._employeeRepo.Delete(emp.Id);
+                _unitOfWork.Save();
 
                 return RedirectToAction("Index");
             }
