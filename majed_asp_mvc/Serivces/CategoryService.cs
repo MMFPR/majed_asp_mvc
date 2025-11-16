@@ -66,8 +66,5 @@ namespace majed_asp_mvc.Serivces
 
 
 
-
-
-
     }
 }

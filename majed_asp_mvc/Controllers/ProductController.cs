@@ -13,21 +13,29 @@ namespace majed_asp_mvc.Controllers
     {
         //private readonly ApplicationDbContext _context;
 
-        private readonly IProductRepo _productRepo;
-        private readonly IRepository<Category> _categoryRepo;
+        //private readonly IProductRepo _productRepo;
+        //private readonly IRepository<Category> _categoryRepo;
 
-        public ProductController(IProductRepo productRepo, IRepository<Category> categoryRepo)
+        //public ProductController(IProductRepo productRepo, IRepository<Category> categoryRepo)
+        //{
+        //    //_context = context;
+        //    _productRepo = productRepo;
+        //    _categoryRepo = categoryRepo;
+        //}
+
+        private readonly IUnitOfWork _unitOfWork;
+        public ProductController(IUnitOfWork unitOfWork)
         {
-            //_context = context;
-            _productRepo = productRepo;
-            _categoryRepo = categoryRepo;
+            _unitOfWork = unitOfWork;
         }
+
         public IActionResult Index()
         {
             try 
             {
                 //IEnumerable<Product> Products = _context.Products.Include(c => c.Category).ToList();
-                IEnumerable<Product> Products = _productRepo.GetProductsWithCategory();
+                //IEnumerable<Product> Products = _productRepo.GetProductsWithCategory();
+                IEnumerable<Product> Products = _unitOfWork._productRepo.GetProductsWithCategory();
 
                 ////تحديث التوكن للبيانات القديمة في قاعدة البيانات يستخدم مرة واحدة عند وجود بيانات سابقة لا تحتوي على توكن بعد ذلك يتوقف الكود 
                 //foreach (var item in Products)
@@ -57,7 +65,8 @@ namespace majed_asp_mvc.Controllers
         private void SetCategoryViewBag()
         {
             //IEnumerable<Category> categories = _context.Categories.ToList();
-            IEnumerable<Category> categories = _categoryRepo.GetAll();
+            //IEnumerable<Category> categories = _categoryRepo.GetAll();
+            IEnumerable<Category> categories = _unitOfWork._repositoryCategory.GetAll();
             ViewBag.Categories = categories;
         }
 
@@ -86,7 +95,8 @@ namespace majed_asp_mvc.Controllers
                 //_context.Products.Add(product);
                 //_context.SaveChanges();
 
-                _productRepo.Add(product);
+                //_productRepo.Add(product);
+                _unitOfWork._productRepo.Add(product);
 
                 return RedirectToAction("Index");
             }
@@ -101,7 +111,8 @@ namespace majed_asp_mvc.Controllers
         public IActionResult Edit(string Uid)
         {
             //var products = _context.Products.AsNoTracking().FirstOrDefault(e => e.Uid == Uid);
-            var products = _productRepo.GetByUId(Uid);
+            //var products = _productRepo.GetByUId(Uid);
+            var products = _unitOfWork._productRepo.GetByUId(Uid);
             SetCategoryViewBag();
             return View(products);
         }
@@ -119,7 +130,8 @@ namespace majed_asp_mvc.Controllers
                 }
 
                 //var prod = _context.Products.AsNoTracking().FirstOrDefault(e => e.Uid == product.Uid);
-                var prod = _productRepo.GetByUId(product.Uid);
+                //var prod = _productRepo.GetByUId(product.Uid);
+                var prod = _unitOfWork._productRepo.GetByUId(product.Uid);
                 if (prod != null) 
                 {
                     prod.Name = product.Name;
@@ -130,7 +142,8 @@ namespace majed_asp_mvc.Controllers
                     //_context.Products.Update(prod);
                     //_context.SaveChanges();
 
-                    _productRepo.Update(prod);
+                    //_productRepo.Update(prod);
+                    _unitOfWork._productRepo.Update(prod);
 
                     return RedirectToAction("Index");
 
@@ -151,7 +164,8 @@ namespace majed_asp_mvc.Controllers
         public IActionResult Delete(string Uid)
         {
             //var products = _context.Products.AsNoTracking().FirstOrDefault(e => e.Uid == Uid);
-            var products = _productRepo.GetByUId(Uid);
+            //var products = _productRepo.GetByUId(Uid);
+            var products = _unitOfWork._productRepo.GetByUId(Uid);
             if (products == null)
             {
                 return NotFound();
@@ -170,7 +184,8 @@ namespace majed_asp_mvc.Controllers
                 //_context.Products.Remove(product);
                 //_context.SaveChanges();
 
-                _productRepo.Delete(product.Uid);
+                //_productRepo.Delete(product.Uid);
+                _unitOfWork._productRepo.Delete(product.Uid);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)

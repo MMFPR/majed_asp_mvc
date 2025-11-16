@@ -2,6 +2,7 @@
 using majed_asp_mvc.Data;
 using majed_asp_mvc.Filters;
 using majed_asp_mvc.Interfaces;
+using majed_asp_mvc.Interfaces.IServices;
 using majed_asp_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,29 +10,14 @@ using Microsoft.EntityFrameworkCore;
 namespace majed_asp_mvc.Controllers
 {
     [SessionAuthorize]
-    // تعريف وحدة التحكم الخاصة بالتصنيفات
     public class CategoryController : Controller
     {
-        // تعريف كائن قاعدة البيانات
-        //private readonly ApplicationDbContext _context;
-        //private readonly IRepository<Category> _categoryRepository;
 
-        //public CategoryController(IRepository<Category> categoryRepository)
-        //{
-        //    _categoryRepository = categoryRepository;
-        //}
+        private readonly ICategoryService _categoryService;
 
-        // حقن كائن قاعدة البيانات داخل وحدة التحكم
-        //public CategoryController(ApplicationDbContext context)
-        //{
-        //    _context = context;
-        //}
-
-
-        private readonly IUnitOfWork _unitOfWork;
-        public CategoryController(IUnitOfWork unitOfWork)
+        public CategoryController(ICategoryService categoryService)
         {
-            _unitOfWork = unitOfWork;
+            _categoryService = categoryService;
         }
 
 
@@ -41,61 +27,30 @@ namespace majed_asp_mvc.Controllers
         {
             try
             {
-                // جلب جميع التصنيفات من قاعدة البيانات
-                //IEnumerable<Category> categories = _context.Categories.ToList();
-                //IEnumerable<Category> categories = _categoryRepository.GetAll();
-                IEnumerable<Category> categories = _unitOfWork._repositoryCategory.GetAll();
-
-                ////تحديث التوكن للبيانات القديمة في قاعدة البيانات يستخدم مرة واحدة عند وجود بيانات سابقة لا تحتوي على توكن بعد ذلك يتوقف الكود 
-                //foreach (var category in categories)
-                //{
-                //    if (string.IsNullOrEmpty(category.Uid))
-                //    {
-                //        category.Uid = Guid.NewGuid().ToString();
-                //        category.CreatedAt = DateTime.Now;
-                //        _context.Categories.Update(category);
-                //        _context.SaveChanges();
-                //    }
-                //}
-
-
-                // عرض البيانات داخل صفحة Index
+                IEnumerable<Category> categories = _categoryService.GetAll();
                 return View(categories);
             }
             catch (Exception ex)
             {
-                // في حال حدوث خطأ، عرض رسالة للمستخدم
                 return Content("حدث خطا غير متوقع يرجي مراجهة الدعم الفني:0565455252545");
             }
         }
 
-        // عرض نموذج إضافة تصنيف جديد
         [HttpGet]
         public IActionResult Create()
         {
-            return View(); // عرض صفحة النموذج فقط
+            return View(); 
         }
 
-        // استقبال البيانات من النموذج وحفظ التصنيف الجديد
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Category category)
         {
             try
             {
-                // التحقق من صحة البيانات المدخلة
-                if (!ModelState.IsValid)
-                {
-                    return View(category); // إعادة عرض النموذج مع البيانات
-                }
-
-                //_context.Categories.Add(category); // جملة الإضافة
-                //_context.SaveChanges(); // حفظ التغييرات في قاعدة البيانات
-
-                //_categoryRepository.Add(category); // إضافة التصنيف الجديد عبر المستودع
-                _unitOfWork._repositoryCategory.Add(category);
-                _unitOfWork.Save();
-                return RedirectToAction("Index"); // إعادة التوجيه إلى صفحة Index
+                if (!ModelState.IsValid) return View(category);
+                _categoryService.Create(category);
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
@@ -103,51 +58,33 @@ namespace majed_asp_mvc.Controllers
             }
         }
 
-        // عرض نموذج تعديل التصنيف حسب الـ Id
         [HttpGet]
         public IActionResult Edit(string Uid)
         {
-            //var category = _context.Categories.AsNoTracking().FirstOrDefault(c => c.Uid == Uid); // البحث عن التصنيف المطلوب
-            //var category = _categoryRepository.GetByUId(Uid); // جلب التصنيف عبر المستودع
-            var category = _unitOfWork._repositoryCategory.GetByUId(Uid);
-            return View(category); // عرض النموذج مع بيانات التصنيف
+            var category = _categoryService.GetByUid(Uid);
+            return View(category);
         }
 
-        // استقبال التعديلات وحفظها
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Category category,string Uid)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return View(category); // إعادة عرض النموذج في حال وجود أخطاء
-                }
+                if (!ModelState.IsValid) return View(category);
 
-                //var cate= _context.Categories.AsNoTracking().FirstOrDefault(e => e.Uid == category.Uid);
-                //var cate= _categoryRepository.GetByUId(Uid);
-                var cate= _unitOfWork._repositoryCategory.GetByUId(Uid);
+                var cate = _categoryService.GetByUid(category.Uid);
                 if (cate != null) 
                 {
                     cate.Name = category.Name;
                     cate.Description = category.Description;
 
-                    //_context.Categories.Update(cate); // تحديث بيانات التصنيف
-                    //_context.SaveChanges(); // حفظ التغييرات
+                    _categoryService.Update(Uid, cate);
 
-                    //_categoryRepository.Update(cate); // تحديث التصنيف عبر المستودع
-                    _unitOfWork._repositoryCategory.Update(cate);
-                    _unitOfWork.Save();
-
-                    return RedirectToAction("Index"); // العودة لصفحة التصنيفات
+                    return RedirectToAction("Index");
 
                 }
-
-                return View(category);
-
-
-                
+                return View(category);    
             }
             catch (Exception ex)
             {
@@ -155,39 +92,28 @@ namespace majed_asp_mvc.Controllers
             }
         }
 
-        // عرض صفحة تأكيد الحذف لتصنيف معين
         [HttpGet]
         public IActionResult Delete(string Uid)
         {
-            //var category = _context.Categories.AsNoTracking().FirstOrDefault(c => c.Uid == Uid); // البحث عن التصنيف المطلوب
-            //var category = _categoryRepository.GetByUId(Uid);
-            var category = _unitOfWork._repositoryCategory.GetByUId(Uid);
 
-            return View(category); // عرض صفحة الحذف
+            var category = _categoryService.GetByUid(Uid);
+
+            return View(category);
         }
 
-        // تنفيذ عملية الحذف بعد التأكيد
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(Category category)
         {
             try
             {
-                // جلب العنصر من قاعدة البيانات باستخدام Uid
-                //var item = _categoryRepository.GetByUId(category.Uid);
-                var item = _unitOfWork._repositoryCategory.GetByUId(category.Uid);
+                var item = _categoryService.GetByUid(category.Uid);
                 if (item != null)
                 {
-                    // حذف العنصر باستخدام Id الفعلي
-                    //_categoryRepository.Delete(item.Id);
-                    _unitOfWork._repositoryCategory.Delete(item.Id);
-                    _unitOfWork.Save();
-
+                    _categoryService.DeleteByUid(category.Uid);
                 }
-                //_context.Categories.Remove(category); // حذف التصنيف
-                //_context.SaveChanges(); // حفظ التغييرات
 
-                return RedirectToAction("Index"); // العودة لصفحة التصنيفات
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {

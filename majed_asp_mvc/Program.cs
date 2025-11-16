@@ -1,6 +1,8 @@
 using majed_asp_mvc.Data;
 using majed_asp_mvc.Interfaces;
+using majed_asp_mvc.Interfaces.IServices;
 using majed_asp_mvc.Repositories;
+using majed_asp_mvc.Serivces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +30,9 @@ builder.Services.AddScoped(typeof(IProductRepo), typeof(ProductRepo));
 builder.Services.AddScoped(typeof(IEmployeeRepo), typeof(EmployeeRepo));
 
 builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 
 
 var app = builder.Build();
