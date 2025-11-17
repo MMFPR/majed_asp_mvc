@@ -1,0 +1,6 @@
+@majed_asp_api_HostAddress = http://localhost:5247
+
+GET {{majed_asp_api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

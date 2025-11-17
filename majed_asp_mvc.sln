@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36414.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "majed_asp_mvc", "majed_asp_mvc\majed_asp_mvc.csproj", "{11868EB2-B7A2-4C7F-86B8-0E03D50B5306}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "majed_asp_api", "majed_asp_api\majed_asp_api.csproj", "{45A03617-232C-40F6-B0BF-B3BF713449EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{11868EB2-B7A2-4C7F-86B8-0E03D50B5306}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11868EB2-B7A2-4C7F-86B8-0E03D50B5306}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11868EB2-B7A2-4C7F-86B8-0E03D50B5306}.Release|Any CPU.Build.0 = Release|Any CPU
+		{45A03617-232C-40F6-B0BF-B3BF713449EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{45A03617-232C-40F6-B0BF-B3BF713449EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{45A03617-232C-40F6-B0BF-B3BF713449EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{45A03617-232C-40F6-B0BF-B3BF713449EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
