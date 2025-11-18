@@ -19,6 +19,7 @@ namespace majed_asp_mvc.Data
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Nationality> Nationalities { get; set; }
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<User> Users { get; set; }
 
     }
 

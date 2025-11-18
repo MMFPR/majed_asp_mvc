@@ -21,6 +21,7 @@ namespace majed_asp_mvc.Repositories
             _jobRepo = new MainRepository<Job>(_context);
             _nationalityRepo = new MainRepository<Nationality>(_context);
             _repositoryCategory = new MainRepository<Category>(_context);
+            _repositoryUser = new MainRepository<User>(_context);
             _productRepo = new ProductRepo(_context);
 
         }
@@ -33,6 +34,7 @@ namespace majed_asp_mvc.Repositories
         public IRepository<Job> _jobRepo { get; }
         public IRepository<Nationality> _nationalityRepo { get; }
         public IRepository<Category> _repositoryCategory { get; }
+        public IRepository<User> _repositoryUser { get; }
         public IProductRepo _productRepo { get; }
         public void Save()
         {

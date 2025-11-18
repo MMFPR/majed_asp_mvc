@@ -10,6 +10,7 @@ namespace majed_asp_mvc.Interfaces
         IRepository<Job> _jobRepo { get; }
         IRepository<Nationality> _nationalityRepo { get; }
         IRepository<Category> _repositoryCategory { get; }
+        IRepository<User> _repositoryUser { get; }
         IProductRepo _productRepo { get; }
 
         void Save();
