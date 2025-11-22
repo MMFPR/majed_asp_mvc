@@ -3,25 +3,18 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit Product</h1>
+<h1>Eidt Product</h1>
 
-<form method="post" asp-action="Edit">
+<form method="post" asp-action="Edit" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
 
-    <input asp-for="Uid" type="hidden" name="Uid" class="form-control" />
-
+    <input asp-for="Uid" name="Uid" class="form-control" />
     <div class="mb-3">
         <label asp-for="Name" class="form-label"></label>
         <input asp-for="Name" name="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="CategoryId" class="form-label"></label>
-        <select asp-for="CategoryId" name="CategoryId" class="form-control" asp-items="@ViewBag.Categories">
-            <option selected value="">-- Select Category --</option>
-        </select>
-    </div>
 
     <div class="mb-3">
         <label asp-for="Price" class="form-label"></label>
@@ -30,10 +23,25 @@
     </div>
 
     <div class="mb-3">
+        <label asp-for="CategoryId" class="form-label"></label>
+        <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.Categories">
+            <option value="">-- Select Category --</option>
+        </select>
+
+    </div>
+
+    <div class="mb-3">
         <label asp-for="Description" class="form-label"></label>
         <textarea asp-for="Description" name="Description" class="form-control"></textarea>
 
     </div>
+
+    <div class="mb-3">
+        <label for="ImageFile">Product Image</label>
+        <input type="file" id="ImageFile" name="ImageFile" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" />
+    </div>
+
+
 
     <button type="submit" class="btn btn-outline-primary">Update</button>
     <a asp-action="Index" class="btn btn-dark">Back</a>

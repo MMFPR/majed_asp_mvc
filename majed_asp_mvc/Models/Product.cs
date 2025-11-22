@@ -12,6 +12,10 @@ namespace majed_asp_mvc.Models
         public double Price { get; set; }
         public string? Description { get; set; }
 
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
+        public string? ImageUrl { get; set; }
+
         [ForeignKey("Category")]
         public int? CategoryId { get; set; }
         public Category? Category { get; set; }

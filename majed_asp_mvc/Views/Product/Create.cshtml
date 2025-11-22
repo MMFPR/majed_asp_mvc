@@ -5,7 +5,7 @@
 
 <h1>Add Product</h1>
 
-<form method="post" asp-action="Create">
+<form method="post" asp-action="Create" enctype="multipart/form-data">
     @Html.AntiForgeryToken()
 
     <div class="mb-3">
@@ -13,6 +13,7 @@
         <input asp-for="Name" name="Name" class="form-control" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+
 
     <div class="mb-3">
         <label asp-for="Price" class="form-label"></label>
@@ -22,9 +23,10 @@
 
     <div class="mb-3">
         <label asp-for="CategoryId" class="form-label"></label>
-        <select asp-for="CategoryId" name="CategoryId" class="form-control" asp-items="@ViewBag.Categories">
-            <option selected value="">-- Select Category --</option>
+        <select asp-for="CategoryId" class="form-control" asp-items="@ViewBag.Categories">
+            <option value="">-- Select Category --</option>
         </select>
+
     </div>
 
     <div class="mb-3">
@@ -32,6 +34,14 @@
         <textarea asp-for="Description" name="Description" class="form-control"></textarea>
 
     </div>
+
+    <div class="mb-3">
+        <label for="ImageFile">Product Image</label>
+        <input type="file" id="ImageFile" name="ImageFile" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" />
+    </div>
+
+
+
 
     <button type="submit" class="btn btn-outline-primary">Save</button>
     <a asp-action="Index" class="btn btn-dark">Back</a>

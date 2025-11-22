@@ -1,5 +1,4 @@
-﻿using majed_asp_mvc.Data;
-using majed_asp_mvc.Filters;
+﻿using majed_asp_mvc.Filters;
 using majed_asp_mvc.Interfaces;
 using majed_asp_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -24,14 +23,16 @@ namespace majed_asp_mvc.Controllers
         //}
 
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _env;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment env)
         {
             _unitOfWork = unitOfWork;
+            _env = env;
         }
 
         public IActionResult Index()
         {
-            try 
+            try
             {
                 //IEnumerable<Product> Products = _context.Products.Include(c => c.Category).ToList();
                 //IEnumerable<Product> Products = _productRepo.GetProductsWithCategory();
@@ -50,13 +51,13 @@ namespace majed_asp_mvc.Controllers
                 return View(Products);
 
 
-            } 
-            
+            }
+
             catch (Exception ex)
             {
                 return Content("حدث خطا غير متوقع يرجي مراجهة الدعم الفني:0565455252545");
             }
-            
+
         }
 
         //------------------------
@@ -66,9 +67,16 @@ namespace majed_asp_mvc.Controllers
         {
             //IEnumerable<Category> categories = _context.Categories.ToList();
             //IEnumerable<Category> categories = _categoryRepo.GetAll();
+
+            //IEnumerable<Category> categories = _unitOfWork._repositoryCategory.GetAll();
+            //ViewBag.Categories = categories;
+
             IEnumerable<Category> categories = _unitOfWork._repositoryCategory.GetAll();
-            ViewBag.Categories = categories;
+            SelectList selectListItems = new SelectList(categories, "Id", "Name");
+            ViewBag.Categories = selectListItems;
         }
+
+
 
 
         //------------------------
@@ -78,8 +86,56 @@ namespace majed_asp_mvc.Controllers
         public IActionResult Create()
         {
             SetCategoryViewBag();
-            return View(); 
+            return View();
         }
+
+
+
+        private string? SaveImage(IFormFile? file)
+        {
+            if (file == null || file.Length == 0) return null;
+
+            // التحقق من الامتداد (اختياري لكنه مهم)
+            var allowed = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+            var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!allowed.Contains(ext))
+                throw new InvalidOperationException("امتداد الملف غير مسموح");
+
+            // مسار المجلد داخل wwwroot
+            var folder = Path.Combine("uploads", "products");
+            var rootFolder = Path.Combine(_env.WebRootPath, folder);
+
+            // إنشاء المجلد لو غير موجود
+            Directory.CreateDirectory(rootFolder);
+
+            // اسم ملف فريد
+            var fileName = $"{Guid.NewGuid():N}{ext}";
+            var fullPath = Path.Combine(rootFolder, fileName);
+
+            using (var stream = System.IO.File.Create(fullPath))
+            {
+                file.CopyTo(stream);
+            }
+
+            // نعيد المسار النسبي للاستخدام في <img src="~/{path}">
+            var relativePath = Path.Combine(folder, fileName).Replace('\\', '/');
+            return "/" + relativePath;
+        }
+
+
+
+        private void DeleteImageIfExists(string? relativePath)
+        {
+            if (string.IsNullOrWhiteSpace(relativePath)) return;
+
+            var fullPath = Path.Combine(_env.WebRootPath, relativePath.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+        }
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -96,7 +152,19 @@ namespace majed_asp_mvc.Controllers
                 //_context.SaveChanges();
 
                 //_productRepo.Add(product);
+
+                if (product.ImageFile != null)
+                {
+                    // حفظ الصورة في المجلد وإرجاع المسار النسبي
+                    var imagePath = SaveImage(product.ImageFile);
+                    product.ImageUrl = imagePath;
+                }
+
+
+
                 _unitOfWork._productRepo.Add(product);
+                _unitOfWork.Save();
+
 
                 return RedirectToAction("Index");
             }
@@ -106,7 +174,7 @@ namespace majed_asp_mvc.Controllers
             }
         }
 
-       
+
         [HttpGet]
         public IActionResult Edit(string Uid)
         {
@@ -117,7 +185,7 @@ namespace majed_asp_mvc.Controllers
             return View(products);
         }
 
-     
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Product product)
@@ -126,13 +194,13 @@ namespace majed_asp_mvc.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return View(product); 
+                    return View(product);
                 }
 
                 //var prod = _context.Products.AsNoTracking().FirstOrDefault(e => e.Uid == product.Uid);
                 //var prod = _productRepo.GetByUId(product.Uid);
                 var prod = _unitOfWork._productRepo.GetByUId(product.Uid);
-                if (prod != null) 
+                if (prod != null)
                 {
                     prod.Name = product.Name;
                     prod.Price = product.Price;
@@ -143,7 +211,28 @@ namespace majed_asp_mvc.Controllers
                     //_context.SaveChanges();
 
                     //_productRepo.Update(prod);
+
+
+                    //------------------------------
+                    //if (prod.ImageFile != null)
+                    //{
+                    //    // حفظ الصورة في المجلد وإرجاع المسار النسبي
+                    //    var imagePath = SaveImage(product.ImageFile);
+                    //    prod.ImageUrl = imagePath;
+                    //} لا يعمل
+
+
+                    if (product.ImageFile != null)
+                    {
+                        // حفظ الصورة في المجلد وإرجاع المسار النسبي
+                        var imagePath = SaveImage(product.ImageFile);
+                        prod.ImageUrl = imagePath;
+                    }
+
+
                     _unitOfWork._productRepo.Update(prod);
+                    _unitOfWork.Save();
+
 
                     return RedirectToAction("Index");
 
@@ -159,7 +248,7 @@ namespace majed_asp_mvc.Controllers
             }
         }
 
-        
+
         [HttpGet]
         public IActionResult Delete(string Uid)
         {
@@ -171,7 +260,7 @@ namespace majed_asp_mvc.Controllers
                 return NotFound();
             }
 
-            return View(products); 
+            return View(products);
         }
 
 

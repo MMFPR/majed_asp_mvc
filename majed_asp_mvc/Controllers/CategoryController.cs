@@ -1,11 +1,8 @@
 ﻿// استدعاء الملفات الضرورية: قاعدة البيانات، النماذج، وأدوات MVC
-using majed_asp_mvc.Data;
 using majed_asp_mvc.Filters;
-using majed_asp_mvc.Interfaces;
 using majed_asp_mvc.Interfaces.IServices;
 using majed_asp_mvc.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace majed_asp_mvc.Controllers
 {
@@ -39,7 +36,7 @@ namespace majed_asp_mvc.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(); 
+            return View();
         }
 
         [HttpPost]
@@ -67,14 +64,14 @@ namespace majed_asp_mvc.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Category category,string Uid)
+        public IActionResult Edit(Category category, string Uid)
         {
             try
             {
                 if (!ModelState.IsValid) return View(category);
 
                 var cate = _categoryService.GetByUid(category.Uid);
-                if (cate != null) 
+                if (cate != null)
                 {
                     cate.Name = category.Name;
                     cate.Description = category.Description;
@@ -84,7 +81,7 @@ namespace majed_asp_mvc.Controllers
                     return RedirectToAction("Index");
 
                 }
-                return View(category);    
+                return View(category);
             }
             catch (Exception ex)
             {
