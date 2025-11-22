@@ -1,4 +1,5 @@
-﻿using majed_asp_mvc.Models;
+﻿using majed_asp_mvc.Dtos;
+using majed_asp_mvc.Models;
 
 namespace majed_asp_mvc.Interfaces.IServices
 {
@@ -13,7 +14,6 @@ namespace majed_asp_mvc.Interfaces.IServices
         void Update(User user);
         void Delete(int id);
 
-        User GetByEmailAndPassword(string email, string password);
-
+        User GetByEmailAndPassword(LoginRequestDto loginRequest);
     }
 }

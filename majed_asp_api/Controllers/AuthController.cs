@@ -15,23 +15,53 @@ namespace majed_asp_api.Controllers
             _userService = userService;
         }
 
+
+        //[HttpGet("login")]
+        //public ActionResult<LoginResponse> Login([FromQuery] LoginRequestDto loginRequest)
+        //{
+
+        //    // Dummy authentication logic
+        //    if (loginRequest.Email == "user@gmail.com" && loginRequest.Password == "123456")
+        //    {
+
+        //        var response = new LoginResponse
+        //        {
+        //            IsSuccess = true,
+        //            FirstName = "Mohamed Alswaify",
+        //            Email = "user@gmail.com",
+
+        //        };
+
+
+        //        return Ok(response);
+        //    }
+        //    return Unauthorized();
+
+        //}
+
+
         [HttpGet("login")]
-        public ActionResult<LoginResponsetDto> Login([FromQuery] LoginRequestDto loginRequest)
+        public ActionResult<string> Login([FromQuery] LoginRequestDto loginRequest)
         {
-            if (loginRequest.Email == "user@gmail.com" && loginRequest.Password == "1234")
+            try
             {
+                if (string.IsNullOrWhiteSpace(loginRequest.Email) || string.IsNullOrWhiteSpace(loginRequest.Password))
+                    return BadRequest("Username and password are required.");
 
-                var response = new LoginResponsetDto
-                {
-                    IsSuccus = true,
-                    FirstName = "Majed",
-                    Email = "user@gmail.com",
-                };
+                var token = _userService.GetByEmailAndPassword(loginRequest);
+                if (token == null)
+                    return Unauthorized("اسم المستخدم او كلمه المرور غير صحيحه"); // 401
+                return Ok(token); // 200
 
-                return Ok(response);
             }
-            return Unauthorized("Invalid email or password");
+            catch (Exception ex)
+            {
+                var message = ex.Message.ToString();
+                return BadRequest($"{message}حدث خطا غير متوقع");
+            }
+
         }
+
 
         [HttpPost("register")]
         public ActionResult Register([FromBody] UserDto registerRequest)
@@ -49,24 +79,34 @@ namespace majed_asp_api.Controllers
                     FirstName = registerRequest.FirstName,
                     LastName = registerRequest.LastName,
                     Gender = registerRequest.Gender,
-                    Birthday = registerRequest.Birthday,
+                    BirthDate = registerRequest.BirthDate,
                     Country = registerRequest.Country,
                     Email = registerRequest.Email,
                     Password = registerRequest.Password,
                     Phone = registerRequest.Phone,
-                }
-                ;
+                };
 
                 _userService.Create(newUser);
 
-                return Ok("User registered successfully.");
+                var result = new registerDto
+                {
+                    firstName = newUser.FirstName,
+                    lastName = newUser.LastName,
+                };
+
+
+                return Ok(result);
             }
             catch (Exception ex)
             {
                 var message = ex.Message.ToString();
-                return BadRequest($"{message} حدث خطا غير متوقع ");
+                return BadRequest($"{message}حدث خطا غير متوقع");
             }
         }
+
+
+
+
 
 
 

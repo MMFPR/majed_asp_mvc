@@ -1,4 +1,5 @@
-﻿using majed_asp_mvc.Interfaces;
+﻿using majed_asp_mvc.Dtos;
+using majed_asp_mvc.Interfaces;
 using majed_asp_mvc.Interfaces.IServices;
 using majed_asp_mvc.Models;
 
@@ -35,10 +36,16 @@ namespace majed_asp_mvc.Serivces
             return _unitOfWork._repositoryUser.GetAll();
         }
 
-        public User GetByEmailAndPassword(string email, string password)
+        //public User GetByEmailAndPassword(string email, string password)
+        //{
+        //    return _unitOfWork._repositoryUser.GetAll().FirstOrDefault(u => u.Email == email && u.Password == password);
+        //}
+
+        public User GetByEmailAndPassword(LoginRequestDto loginRequest)
         {
-            return _unitOfWork._repositoryUser.GetAll().FirstOrDefault(u => u.Email == email && u.Password == password);
+            return _unitOfWork._repositoryUser.GetAll().FirstOrDefault(u => u.Email == loginRequest.Email && u.Password == loginRequest.Password);
         }
+
 
         public User GetById(int id)
         {
